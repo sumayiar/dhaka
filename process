@@ -1,0 +1,42 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the data
+file_path = '/mnt/data/Dhaka_PM2.5_2022.csv'
+data = pd.read_csv(file_path)
+
+# Preprocess the data
+data['Date (LT)'] = pd.to_datetime(data['Date (LT)'], format='%d/%m/%Y %H:%M')
+data['Month'] = data['Date (LT)'].dt.month
+data['Day'] = data['Date (LT)'].dt.day
+
+# Set the plot style
+sns.set(style='whitegrid')
+
+# Line Plot for PM2.5 levels over time
+plt.figure(figsize=(14, 7))
+sns.lineplot(x='Date (LT)', y='NowCast Conc.', data=data, label='PM2.5')
+plt.title('PM2.5 Levels in Dhaka Over Time (2022)')
+plt.xlabel('Date')
+plt.ylabel('PM2.5 Concentration (µg/m³)')
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Histogram for the distribution of PM2.5 levels
+plt.figure(figsize=(12, 6))
+sns.histplot(data['NowCast Conc.'], bins=30, kde=True)
+plt.title('Distribution of PM2.5 Levels in Dhaka (2022)')
+plt.xlabel('PM2.5 Concentration (µg/m³)')
+plt.ylabel('Frequency')
+plt.show()
+
+# Box Plot for monthly variation of PM2.5 levels
+plt.figure(figsize=(14, 7))
+sns.boxplot(x='Month', y='NowCast Conc.', data=data)
+plt.title('Monthly Variation of PM2.5 Levels in Dhaka (2022)')
+plt.xlabel('Month')
+plt.ylabel('PM2.5 Concentration (µg/m³)')
+plt.show()
